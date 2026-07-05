@@ -27,12 +27,12 @@ st.set_page_config(
 def load_models():
 
     model_v2 = tf.keras.models.load_model(
-        "models/MobileNetV2_FineTune.h5",
+        "models/MobileNetV2_FineTune.keras",
         compile=False
     )
 
     model_v3 = tf.keras.models.load_model(
-        "models/MobileNetV3_FineTune.h5",
+        "models/MobileNetV3_FineTune.keras",
         compile=False
     )
 
