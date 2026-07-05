@@ -48,23 +48,23 @@ def load_classes():
 
 
 model_v2, model_v3 = load_models()
+
 class_names = load_classes()
 
 # ======================================
 # Judul
 # ======================================
 
-st.title("Klasifikasi Motif Batik Indonesia")
+st.title("🎨 Klasifikasi Motif Batik Indonesia")
 
 st.markdown(
 """
-Aplikasi ini melakukan klasifikasi motif batik menggunakan dua model
-deep learning yaitu **MobileNetV2** dan **MobileNetV3**.
+Aplikasi ini melakukan klasifikasi motif batik menggunakan model **MobileNetV2** dan **MobileNetV3**.
 """
 )
 
 # ======================================
-# Upload Gambar
+# Upload
 # ======================================
 
 uploaded_file = st.file_uploader(
@@ -97,30 +97,32 @@ if uploaded_file is not None:
             pred_v2, conf_v2, prob_v2 = predict_image(
                 model_v2,
                 image,
-                class_names
+                class_names,
+                model_type="v2"
             )
 
             pred_v3, conf_v3, prob_v3 = predict_image(
                 model_v3,
                 image,
-                class_names
+                class_names,
+                model_type="v3"
             )
 
         st.subheader("📊 Hasil Prediksi")
 
         hasil = pd.DataFrame({
 
-            "Model":[
+            "Model": [
                 "MobileNetV2",
                 "MobileNetV3"
             ],
 
-            "Prediksi":[
+            "Prediksi": [
                 pred_v2,
                 pred_v3
             ],
 
-            "Confidence":[
+            "Confidence": [
                 f"{conf_v2*100:.2f}%",
                 f"{conf_v3*100:.2f}%"
             ]
@@ -133,27 +135,21 @@ if uploaded_file is not None:
             hide_index=True
         )
 
-        # Model terbaik
-
         if conf_v2 > conf_v3:
 
             st.success(
-                f"🏆 Model terbaik: MobileNetV2 ({conf_v2*100:.2f}%)"
+                f"🏆 Confidence tertinggi diperoleh MobileNetV2 ({conf_v2*100:.2f}%)"
             )
 
         elif conf_v3 > conf_v2:
 
             st.success(
-                f"🏆 Model terbaik: MobileNetV3 ({conf_v3*100:.2f}%)"
+                f"🏆 Confidence tertinggi diperoleh MobileNetV3 ({conf_v3*100:.2f}%)"
             )
 
         else:
 
             st.info("Kedua model memiliki confidence yang sama.")
-
-    # ======================================
-    # Top 5 Prediction
-    # ======================================
 
     st.divider()
 
@@ -161,54 +157,56 @@ if uploaded_file is not None:
 
     with col3:
 
-        st.subheader("Top 5 MobileNetV2")
+        st.subheader("Top 5 Prediksi MobileNetV2")
 
-        top5 = top_predictions(
-            prob_v2,
-            class_names
-        )
+        df_v2 = pd.DataFrame(
 
-        df = pd.DataFrame(
-            top5,
+            top_predictions(
+                prob_v2,
+                class_names
+            ),
+
             columns=[
                 "Motif",
                 "Confidence"
             ]
+
         )
 
-        df["Confidence"] = (
-            df["Confidence"]*100
+        df_v2["Confidence"] = (
+            df_v2["Confidence"] * 100
         ).round(2)
 
         st.dataframe(
-            df,
+            df_v2,
             use_container_width=True,
             hide_index=True
         )
 
     with col4:
 
-        st.subheader("Top 5 MobileNetV3")
+        st.subheader("Top 5 Prediksi MobileNetV3")
 
-        top5 = top_predictions(
-            prob_v3,
-            class_names
-        )
+        df_v3 = pd.DataFrame(
 
-        df = pd.DataFrame(
-            top5,
+            top_predictions(
+                prob_v3,
+                class_names
+            ),
+
             columns=[
                 "Motif",
                 "Confidence"
             ]
+
         )
 
-        df["Confidence"] = (
-            df["Confidence"]*100
+        df_v3["Confidence"] = (
+            df_v3["Confidence"] * 100
         ).round(2)
 
         st.dataframe(
-            df,
+            df_v3,
             use_container_width=True,
             hide_index=True
         )
