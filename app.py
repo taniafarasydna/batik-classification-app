@@ -15,7 +15,7 @@ from utils import (
 
 st.set_page_config(
     page_title="Klasifikasi Motif Batik",
-    page_icon="🎨",
+    page_icon="",
     layout="wide"
 )
 
@@ -55,11 +55,12 @@ class_names = load_classes()
 # Judul
 # ======================================
 
-st.title("🎨 Klasifikasi Motif Batik Indonesia")
+st.title("Klasifikasi Motif Batik Indonesia")
 
 st.markdown(
 """
-Aplikasi ini melakukan klasifikasi motif batik menggunakan model **MobileNetV2** dan **MobileNetV3**.
+Upload gambar batik dan bandingkan hasil prediksi
+
 """
 )
 
@@ -68,7 +69,7 @@ Aplikasi ini melakukan klasifikasi motif batik menggunakan model **MobileNetV2**
 # ======================================
 
 uploaded_file = st.file_uploader(
-    "Upload gambar batik",
+    "Upload satu atau beberapa gambar batik ",
     type=["jpg", "jpeg", "png"]
 )
 
